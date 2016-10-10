@@ -27,12 +27,12 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "hm:", ["Path="])
     except getopt.GetoptError:
-        print(__name__ + "-h --t")
+        print(__name__ + "-h -m --Path")
         sys.exit(1)
 
     for opt, arg in opts:
         if opt in '-h':
-            print(__name__ + "-h--t")
+            print(__name__ + "-h -m --Path")
             sys.exit(2)
         elif opt == "-m":
             isMountedDirectory = True
