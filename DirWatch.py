@@ -25,7 +25,7 @@ def main(argv):
     isMountedDirectory = False
 
     try:
-        opts, args = getopt.getopt(argv, "hm:", ["Path="])
+        opts, args = getopt.getopt(argv, "h:m", ["Path="])
     except getopt.GetoptError:
         print(__name__ + "-h -m --Path")
         sys.exit(1)
