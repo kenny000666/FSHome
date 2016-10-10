@@ -9,7 +9,6 @@ from watchdog.events import FileCreatedEvent
 import paho.mqtt.publish as publish
 
 log = None
-isMountedDirectory = False
 
 def initLogger(name):
     global log
@@ -22,6 +21,8 @@ def initLogger(name):
 
 def main(argv):
     initLogger("DirWatch")
+
+    isMountedDirectory = False
 
     try:
         opts, args = getopt.getopt(argv, "hm:", ["Path="])
@@ -39,7 +40,7 @@ def main(argv):
             path = arg
 
     log.debug("Watch Directory: " + path)
-    log.debug("Is Mounted Directory?: " + isMountedDirectory)
+    log.debug("Is Mounted Directory: " + str(isMountedDirectory))
 
     if isMountedDirectory:
         if os.path.ismount(path):
