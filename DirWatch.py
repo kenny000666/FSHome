@@ -31,6 +31,7 @@ def main(argv):
         sys.exit(1)
 
     for opt, arg in opts:
+        log.debug("Arguement: " + opt + " " + arg)
         if opt in '-h':
             print(__name__ + "-h -m --Path")
             sys.exit(2)
