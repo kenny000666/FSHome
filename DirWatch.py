@@ -4,8 +4,9 @@ import logging
 import os
 import sys
 import getopt
+import time
 from watchdog.observers import Observer
-from watchdog.events import FileCreatedEvent
+from watchdog.events import FileSystemEventHandler
 import paho.mqtt.publish as publish
 
 log = None
@@ -18,6 +19,13 @@ def initLogger(name):
     soh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
     log.addHandler(soh)
     log.setLevel(logging.DEBUG)
+
+class FileSystemWatcher(FileSystemEventHandler):
+
+    def on_created(self, event):
+        log.debug("File Created:" + event.src_path)
+
+        publish.multiple([{"topic": "home/motion/diningMotion", "payload": "{0}", "qos": 0, "retain": False}], hostname="192.168.0.61", port="1883", client_id="DirWatcher", auth=None)
 
 def main(argv):
     initLogger("DirWatch")
@@ -49,10 +57,20 @@ def main(argv):
         else:
             log.debug("Path is not mounted")
 
+
+
     #directoryEventHandler = FileCreatedEvent()
-    #observer = Observer()
+    observer = Observer()
+    observer.schedule(FileSystemWatcher(), path)
+    observer.start()
     #observer.schedule(directoryEventHandler, )
 
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
 
+    observer.join()
 
 main(sys.argv[1:])
